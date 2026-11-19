@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Native PBM Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #1e293b;
+            padding: 30px;
+        }
+
+        header {
+            background: #173b70;
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        .card h3 {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 32px;
+            font-weight: bold;
+            color: #173b70;
+        }
+
+        #message {
+            margin-top: 25px;
+            color: #64748b;
+        }
+       .sidebar {
+    width: 240px;
+    background: #173b70;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    padding: 25px 15px;
+    z-index: 10;
+    overflow-y: auto;
+}
+   
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 14px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.sidebar a:hover {
+    background: #31588e;
+}
+
+.main-content {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+    padding: 0 20px;
+}
+    </style>
+</head>
+
+<body>
+<div class="sidebar">
+    <h2>AI PBM</h2>
+
+    <a href="#dashboard">Dashboard</a>
+  <a href="#" onclick="document.getElementById('members-section').scrollIntoView({behavior:'smooth'}); return false;">Members</a>
+    <a href="#medicines">Medicines</a>
+    <a href="#pharmacies">Pharmacies</a>
+    <a href="#claims">Claims</a>
+    <a href="#policies">Insurance Policies</a>
+</div>
+
+<div class="main-content">
+    <header>
+        <h1>AI-Native PBM Platform</h1>
+        <p>Pharmacy Benefit Management Dashboard</p>
+    </header>
+
+    <h2 style="margin-bottom: 20px;">Dashboard Overview</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Total Members</h3>
+            <p id="members">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Medicines</h3>
+            <p id="medicines">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Pharmacies</h3>
+            <p id="pharmacies">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Claims</h3>
+            <p id="claims">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Pending Claims</h3>
+            <p id="pending">-</p>
+        </div>
+
+        <div class="card">
+            <h3>Adjudicated Claims</h3>
+            <p id="adjudicated">-</p>
+        </div>
+    </div>
+
+    <p id="message">Connecting to PBM backend...</p>
+<section id="members-section">
+    <h2>Members Management</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Member ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Insurance ID</th>
+            </tr>
+        </thead>
+
+        <tbody id="members-list">
+        </tbody>
+    </table>
+</section>
+<section id="medicines-section">
+    <h2>Medicines Management</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine ID</th>
+                <th>Name</th>
+                <th>Generic Name</th>
+                <th>Manufacturer</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+
+        <tbody id="medicines-list">
+        </tbody>
+    </table>
+</section>
+    
+    <section id="pharmacies-section">
+    <h2>Pharmacy Management</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Pharmacy ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>License Number</th>
+            </tr>
+        </thead>
+
+        <tbody id="pharmacies-list">
+        </tbody>
+    </table>
+</section>
+    <section id="claims-section">
+    <h2>Claims Management</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Member ID</th>
+                <th>Medicine ID</th>
+                <th>Pharmacy ID</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="claims-list">
+        </tbody>
+    </table>
+</section>
+    <section id="policies-section">
+    <h2>Insurance Policies</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Policy ID</th>
+                <th>Member ID</th>
+                <th>Policy Name</th>
+                <th>Coverage Limit</th>
+                <th>Copay (%)</th>
+                <th>Deductible</th>
+            </tr>
+        </thead>
+        <tbody id="policies-list">
+        </tbody>
+    </table>
+</section>
+    <script>
+        async function loadDashboard() {
+            try {
+                const response = await fetch(
+                    "http://127.0.0.1:8001/dashboard"
+                );
+
+                if (!response.ok) {
+                    throw new Error("Dashboard API failed");
+                }
+
+                const data = await response.json();
+
+                document.getElementById("members").textContent =
+                    data.total_members;
+
+                document.getElementById("medicines").textContent =
+                    data.total_medicines;
+
+                document.getElementById("pharmacies").textContent =
+                    data.total_pharmacies;
+
+                document.getElementById("claims").textContent =
+                    data.total_claims;
+
+                document.getElementById("pending").textContent =
+                    data.pending_claims;
+
+                document.getElementById("adjudicated").textContent =
+                    data.adjudicated_claims;
+
+                document.getElementById("message").textContent =
+                    "Dashboard connected successfully.";
+
+            } catch (error) {
+                document.getElementById("message").textContent =
+                    "Could not connect. Check that the backend is running.";
+            }
+        }
+async function loadMembers() {
+    const tbody = document.getElementById("members-list");
+
+    try {
+        const response = await fetch("http://127.0.0.1:8001/members");
+
+        if (!response.ok) {
+            throw new Error("Failed to load members");
+        }
+
+        const members = await response.json();
+
+        tbody.innerHTML = "";
+
+        members.forEach(member => {
+            const row = document.createElement("tr");
+
+            [
+                member.id,
+                member.name,
+                member.age,
+                member.email,
+                member.insurance_id
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "";
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+        });
+
+    } catch (error) {
+        tbody.innerHTML =
+            "<tr><td colspan='5'>Could not load members.</td></tr>";
+    }
+}
+    async function loadMedicines() {
+    const tbody = document.getElementById("medicines-list");
+
+    try {
+        const response = await fetch("http://127.0.0.1:8001/medicines");
+
+        if (!response.ok) {
+            throw new Error("Failed to load medicines");
+        }
+
+        const medicines = await response.json();
+
+        tbody.innerHTML = "";
+
+        medicines.forEach(medicine => {
+            const row = document.createElement("tr");
+
+            [
+                medicine.id,
+                medicine.name,
+                medicine.generic_name,
+                medicine.manufacturer,
+                medicine.price
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "";
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+        });
+
+    } catch (error) {
+        tbody.innerHTML =
+            "<tr><td colspan='5'>Could not load medicines.</td></tr>";
+    }
+}   
+async function loadPharmacies() {
+    const tbody = document.getElementById("pharmacies-list");
+
+    try {
+        const response = await fetch("http://127.0.0.1:8001/pharmacies");
+
+        if (!response.ok) {
+            throw new Error("Failed to load pharmacies");
+        }
+
+        const pharmacies = await response.json();
+
+        tbody.innerHTML = "";
+
+        pharmacies.forEach(pharmacy => {
+            const row = document.createElement("tr");
+
+            [
+                pharmacy.id,
+                pharmacy.name,
+                pharmacy.address,
+                pharmacy.phone,
+                pharmacy.email,
+                pharmacy.license_number
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "";
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+        });
+
+    } catch (error) {
+        tbody.innerHTML =
+            "<tr><td colspan='6'>Could not load pharmacies.</td></tr>";
+    }
+}
+async function loadClaims() {
+    const tbody = document.getElementById("claims-list");
+
+    try {
+        const response = await fetch("http://127.0.0.1:8001/claims");
+
+        if (!response.ok) {
+            throw new Error("Failed to load claims");
+        }
+
+        const claims = await response.json();
+
+        tbody.innerHTML = "";
+
+        claims.forEach(claim => {
+            const row = document.createElement("tr");
+
+            [
+                claim.id,
+                claim.member_id,
+                claim.medicine_id,
+                claim.pharmacy_id,
+                claim.amount,
+                claim.status
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "";
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+        });
+
+    } catch (error) {
+        tbody.innerHTML =
+            "<tr><td colspan='6'>Could not load claims.</td></tr>";
+    }
+}
+async function loadPolicies() {
+    const tbody = document.getElementById("policies-list");
+
+    try {
+        const response = await fetch("http://127.0.0.1:8001/insurance-policies");
+
+        if (!response.ok) {
+            throw new Error("Failed to load policies");
+        }
+
+        const policies = await response.json();
+
+        tbody.innerHTML = "";
+
+        policies.forEach(policy => {
+            const row = document.createElement("tr");
+
+            [
+                policy.id,
+                policy.member_id,
+                policy.policy_name,
+                policy.coverage_limit,
+                policy.copay_percentage,
+                policy.deductible
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "";
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+        });
+
+    } catch (error) {
+        tbody.innerHTML =
+            "<tr><td colspan='6'>Could not load policies.</td></tr>";
+    }
+}
+loadDashboard();
+        loadMembers();
+        loadMedicines();
+        loadPharmacies();
+        loadClaims();
+        loadPolicies();
+    </script>
+</div>
+</body>
+</html>

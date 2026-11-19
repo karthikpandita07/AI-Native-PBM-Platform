@@ -1,0 +1,17 @@
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: pbm-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pbm_database
+      POSTGRES_USER: pbm_user
+      POSTGRES_PASSWORD: pbm_dev_password_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pbm_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  pbm_postgres_data:
